@@ -1,25 +1,32 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import axios from 'axios';
 import './App.css';
-
-function App() {
+ 
+const App = () => {
+  const [message, setMessage] = useState('');
+ 
+  // Function to handle button click and fetch message from backend
+  const handleClick = () => {
+    // Make a GET request to the backend endpoint
+    axios.get('http://localhost:5001/api/message')
+      .then(response => {
+        // Set the message state with the response from the backend
+        setMessage(response.data.message);
+      })
+      .catch(error => {
+        console.error('Error fetching message:', error);
+      });
+  };
+ 
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <h1>React App</h1>
+        <button onClick={handleClick}>Fetch Message from Backend</button>
+        {message && <p>Message from backend: {message}</p>}
       </header>
     </div>
   );
-}
-
+};
+ 
 export default App;
